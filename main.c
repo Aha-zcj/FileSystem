@@ -514,7 +514,7 @@ int insertRecordIntoFile(void *record, const char *path, RecordType recordType){
                 int insertRecordIndex;
                 RecycledInodeIndexRecord *recordBuffer = malloc(sizeof(RecycledInodeIndexRecord)*(recordNum+1));
                 memset(recordBuffer, 0, sizeof(RecycledInodeIndexRecord)*(recordNum+1));
-                fread(recordBuffer, sizeof(RecycledInodeIndexRecord), recordNum, file); 
+                fread(recordBuffer, sizeof(RecycledInodeIndexRecord), recordNum, file);
                 for (insertRecordIndex = 0; insertRecordIndex < recordNum; insertRecordIndex++) {
                     if (!strcmp(recordBuffer[insertRecordIndex].inodeIndex, "-1")) {
                         break;
@@ -625,8 +625,6 @@ void initSomething(){
 }
 
 void releaseSomething(){
-    //free memory
-    free(gUserTable);
     //update system information
     memset(gCommandBuffer, 0, sizeof(gCommandBuffer));
     sprintf(gCommandBuffer, "%s", SYSTEM_INFORMATION_FILE_NAME);
@@ -988,7 +986,7 @@ void doSomething(){
                 break;
             case ExitingState:
             {
-                printf("The system has exited.");
+                printf("The system has exited.\n");
                 gCurrentSystemState = ExitState;
             }
                 break;
@@ -1268,6 +1266,7 @@ void doSomething(){
                                 sprintf(path, "%s/%s%s", DISK_DIRECTORY_NAME, FILE_PREFIX, recordBuffer[i].fileIndex);
                                 //get the input
                                 printf("You can input the content in multiple lines.However, at the last line you should input ':q' to end the input.\n");
+                                setbuf(stdin, NULL);
                                 while (fgets(gCommandBuffer, COMMAND_CONTENT_MAX_LENGTH, stdin)) {
                                     if (gCommandBuffer[0]==':' && gCommandBuffer[1]=='q') {
                                         break;
@@ -1358,6 +1357,7 @@ void doSomething(){
                                 insertRecordIntoFile(&newRecord, inodePath, FileRecord);
                                 //insert content
                                 printf("You can input the content in multiple lines.However, at the last line you should input ':q' to end the input.\n");
+                                setbuf(stdin, NULL);
                                 while (fgets(gCommandBuffer, COMMAND_CONTENT_MAX_LENGTH, stdin)) {
                                     if (gCommandBuffer[0]==':' && gCommandBuffer[1]=='q') {
                                         break;
